@@ -5,6 +5,8 @@
     de todos los Slice, de esta forma previene 
     errores al cargar los reducer
 */
+
+export * from './auth/authSlice';
 export * from './ui/uiSlice';
 export * from './calendar/calendarSlice';
 
