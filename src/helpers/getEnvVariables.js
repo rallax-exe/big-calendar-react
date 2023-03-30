@@ -9,6 +9,7 @@ export const getEnvVariables = () => {
         //Importa de manera manual la variable de entorno
         //Si tenemos varias variables se necesita importar una por una
         VITE_API_URL: import.meta.env.VITE_API_URL, 
+        
         //...import.meta.env
 
     }
