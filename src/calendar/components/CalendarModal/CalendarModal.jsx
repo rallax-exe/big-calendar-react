@@ -135,8 +135,6 @@ export const CalendarModal = () => {
         //Si el titulo es menor a 0 finaliza 
         if (formValues.title.length <= 0) return;
 
-        console.log(formValues);
-
         //Envia el evento al custom hook
         await startSavingEvent( formValues );
         //Cierra el modal

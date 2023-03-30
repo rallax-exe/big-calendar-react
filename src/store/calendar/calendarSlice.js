@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addHours } from 'date-fns';
 
+/*
 const tempEvent = {
     _id: new Date().getTime(),
     title: 'Un evento importante',
@@ -13,40 +14,42 @@ const tempEvent = {
       name: 'Raul',
     }
 };
+*/
 
 export const calendarSlice = createSlice({
     name: 'calendar',
     initialState: {
 
+        isLoadingEvents: true,
         events: [
-            tempEvent
+            //tempEvent
         ],
         activeEvent: null,
 
     },
 
     reducers: {
-        
-        onSetActiveEvent: ( state, { payload } ) => {
+
+        onSetActiveEvent: (state, { payload }) => {
 
             state.activeEvent = payload;
 
         },
 
-        onAddNewEvent: ( state, { payload } ) => {
+        onAddNewEvent: (state, { payload }) => {
 
-            state.events.push( payload );
-            state.activeEvent = null; 
+            state.events.push(payload);
+            state.activeEvent = null;
 
         },
 
-        onUpdateEvent: ( state, {payload} ) => {
+        onUpdateEvent: (state, { payload }) => {
 
             //Hace una mutacion al array para regresar actualizado el evento
             //Recorre y regresa cada uno de los elementos del array
-            state.events = state.events.map( event => {
+            state.events = state.events.map(event => {
 
-                if( event._id === payload._id ) {
+                if (event.id === payload.id) {
 
                     /*
                         Si el id que viene en el payload
@@ -64,26 +67,57 @@ export const calendarSlice = createSlice({
 
         },
 
-        onDeleteEvent: ( state ) => {
+        onDeleteEvent: (state) => {
 
             //Si el evento activo existe
-            if ( state.activeEvent ){
+            if (state.activeEvent) {
                 //Regresa todos los eventos que sean diferentes a la nota activa
-                state.events = state.events.filter( event => event._id !== state.activeEvent._id );
+                state.events = state.events.filter(event => event.id !== state.activeEvent.id);
                 state.activeEvent = null;
             }
         },
+
+        onLoadEvents: (state, { payload = [] }) => {
+
+            state.isLoadingEvents = false;
+            payload.forEach(event => {
+
+                //Busca si existe el evento regresa un true usando some
+                /*
+                    dbEvent es un evento de base de datos
+                    si el elemento NO concide con el id que estamos
+                    recibiendo en el payload, lo GUARDA en el arreglo
+                    de eventos
+                */
+                const exists = state.events.some(dbEvent => dbEvent.id === event.id);
+                if (!exists) {
+                    state.events.push(event);
+                }
+
+            });
+
+        },
+
+        onLogoutCalendar: (state) => {
+
+            state.isLoadingEvents = true;
+            state.events = [];
+            state.activeEvent = null;
+
+        }
 
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { 
-    
+export const {
+
     onAddNewEvent,
     onDeleteEvent,
-    onSetActiveEvent, 
+    onLoadEvents,
+    onLogoutCalendar,
+    onSetActiveEvent,
     onUpdateEvent,
 
 } = calendarSlice.actions;

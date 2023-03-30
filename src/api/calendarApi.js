@@ -12,7 +12,22 @@ const calendarApi = axios.create ({
 
 });
 
-//Configurar interceptores
+//Interceptores
+//Este actua en un request tambien se puede en response
+calendarApi.interceptors.request.use( config => {
+
+
+    config.headers = {
+        //Por si tienes mas headers, con spred los mantiene
+        ...config.headers,
+        'x-token': localStorage.getItem('token')
+    }
+
+    //Regresa la configuracion modificada
+    return config;
+
+})
+
 
 
 export default calendarApi;
